@@ -46,8 +46,8 @@ router.get("/", async function (req, res) {
 /**
  * @swagger
  * /api/hotels/search:
- *   post:
- *     summary: Search hotels by location
+ *   get:
+ *     summary: Search hotels by location or ID
  *     tags: [Hotels]
  *     requestBody:
  *       required: true
@@ -55,12 +55,18 @@ router.get("/", async function (req, res) {
  *         application/json:
  *           schema:
  *             type: object
- *             properties:
- *               location:
- *                 type: string
+ *             oneOf:
+ *               - properties:
+ *                   location:
+ *                     type: string
+ *                     description: Filter hotels by location
+ *               - properties:
+ *                   id:
+ *                     type: string
+ *                     description: Filter hotels by ID
  *     responses:
  *       200:
- *         description: A list of hotels matching the location
+ *         description: A list of hotels matching the filter
  *         content:
  *           application/json:
  *             schema:
@@ -70,18 +76,29 @@ router.get("/", async function (req, res) {
  *                 properties:
  *                   id:
  *                     type: integer
+ *                     description: Hotel ID
  *                   name:
  *                     type: string
+ *                     description: Hotel name
  *                   location:
  *                     type: string
+ *                     description: Hotel location
  *                   roomsAvailable:
  *                     type: integer
+ *                     description: Number of rooms available
  */
-router.post("/search", async function (req, res) {
+router.get("/search", async function (req, res) {
   try {
-    const criteria = req.body;
-    const getData = await hotelController.getHotelByFilter(criteria);
-    res.status(200).send(getData);
+    const criteria = req.query;
+    if (criteria.id || criteria.location) {
+      const getData = await hotelController.getHotelByFilter(criteria);
+      res.status(200).send(getData);
+    } else {
+      res.status(400).send({
+        status: false,
+        message: "Invalid serach query",
+      });
+    }
   } catch (error) {
     res.status(500).send(error);
   }

@@ -22,7 +22,10 @@ async function getDataByFilter(filter) {
         return data.location == filter.location;
       }
     });
-    filterDataById.length > 0 ? resolve(filterDataById) : reject("NO data");
+    filterDataById.length > 0 ? resolve(filterDataById) : reject({
+      status: false,
+      message: "NO data"
+    });
   });
 }
 
