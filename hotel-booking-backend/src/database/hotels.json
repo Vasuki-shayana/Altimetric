@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Beach View",
+    "location": "Bangalore",
+    "roomsAvailable": 10
+  },
+  {
+    "id": 2,
+    "name": "Park View",
+    "location": "Bangalore",
+    "roomsAvailable": 5
+  },
+  {
+    "id": 3,
+    "name": "City View",
+    "location": "Mysore",
+    "roomsAvailable": 5
+  },
+  {
+    "id": 4,
+    "name": "River View",
+    "location": "Mysore",
+    "roomsAvailable": 0
+  }
+]

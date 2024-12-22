@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hotel Room Booking</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+
+      .container {
+        display: flex;
+        width: 100%;
+      }
+
+      .left {
+        width: 45%;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        margin-right: 20px;
+      }
+
+      .right {
+        width: 45%;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+      }
+
+      label {
+        display: block;
+        margin: 10px 0 5px;
+        font-weight: bold;
+      }
+
+      input,
+      select,
+      button {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      button {
+        background-color: #28a745;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #218838;
+      }
+
+      .error {
+        color: red;
+        font-size: 12px;
+      }
+      .hotel-list,
+      .booking-list {
+        max-height: 400px; /* Set a maximum height */
+        overflow-y: auto; /* Enable vertical scrolling */
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-top: 20px;
+      }
+      
+      .hotel-item,
+      .booking-item {
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Hotel Room Booking</h1>
+
+    <div class="container">
+      <!-- New Section: List of Hotels with Location Filter -->
+      <div class="left">
+        <h2>List of Hotels</h2>
+        <label for="filterLocation">Filter by Location:</label>
+        <input
+          type="text"
+          id="filterLocation"
+          placeholder="Enter Location to filter"
+        />
+
+        <div id="hotelList" class="hotel-list"></div>
+      </div>
+
+      <!-- Left side: Booking form -->
+      <div class="left">
+        <h2>Book a Room</h2>
+        <form id="bookingForm">
+          <label for="hotelId">Hotel ID:</label>
+          <select id="hotelId" name="hotelId" required>
+            <option value="">Select a Hotel</option>
+          </select>
+
+          <label for="userId">User ID:</label>
+          <input
+            type="number"
+            id="userId"
+            name="userId"
+            placeholder="Enter User ID"
+            required
+          />
+
+          <label for="rooms">Number of Rooms:</label>
+          <input
+            type="number"
+            id="rooms"
+            name="rooms"
+            placeholder="Enter number of rooms"
+            min="1"
+            required
+          />
+
+          <label for="checkInDate">Check-In Date:</label>
+          <input type="date" id="checkInDate" name="checkInDate" required />
+
+          <label for="checkOutDate">Check-Out Date:</label>
+          <input type="date" id="checkOutDate" name="checkOutDate" required />
+
+          <button type="submit">Book Now</button>
+          <div id="statusMessage" class="error"></div>
+        </form>
+      </div>
+
+      <!-- Right side: Booking details list -->
+      <div class="right">
+        <h2>Booking Details</h2>
+        <label for="filterUserId">Filter by User ID:</label>
+        <input
+          type="text"
+          id="filterUserId"
+          placeholder="Enter User ID to filter"
+        />
+
+        <div id="bookingDetails" class="booking-list"></div>
+      </div>
+    </div>
+
+    <script>
+      window.onload = async function () {
+        try {
+          // Fetch all hotels when the page loads
+          const response = await fetch("http://localhost:3000/api/hotels");
+          const hotels = await response.json();
+
+          // Populate hotel list with location filter
+          const hotelList = document.getElementById("hotelList");
+          hotelList.innerHTML = ""; // Clear any previous hotels
+
+          // Create a list of hotels with location filter
+          hotels.forEach((hotel) => {
+            const hotelItem = document.createElement("div");
+            hotelItem.classList.add("hotel-item");
+            hotelItem.innerHTML = `
+        <p><strong>Hotel ID:</strong> ${hotel.id}</p>
+        <p><strong>Name:</strong> ${hotel.name}</p>
+        <p><strong>Location:</strong> ${hotel.location}</p>
+      `;
+            hotelList.appendChild(hotelItem);
+          });
+
+          // Implement filtering by location
+          const filterLocation = document.getElementById("filterLocation");
+          filterLocation.addEventListener("input", () => {
+            const filteredHotels = hotels.filter((hotel) =>
+              hotel.location
+                .toLowerCase()
+                .includes(filterLocation.value.toLowerCase())
+            );
+            hotelList.innerHTML = ""; // Clear existing list
+            filteredHotels.forEach((hotel) => {
+              const hotelItem = document.createElement("div");
+              hotelItem.classList.add("hotel-item");
+              hotelItem.innerHTML = `
+          <p><strong>Hotel ID:</strong> ${hotel.id}</p>
+          <p><strong>Name:</strong> ${hotel.name}</p>
+          <p><strong>Location:</strong> ${hotel.location}</p>
+        `;
+              hotelList.appendChild(hotelItem);
+            });
+          });
+
+          // Populate the hotel dropdown (for booking form)
+          const hotelSelect = document.getElementById("hotelId");
+          hotelSelect.innerHTML = '<option value="">Select a Hotel</option>';
+
+          hotels.forEach((hotel) => {
+            const option = document.createElement("option");
+            option.value = hotel.id;
+            option.textContent = `Hotel ID: ${hotel.id} - ${hotel.name}`;
+            hotelSelect.appendChild(option);
+          });
+        } catch (error) {
+          console.error("Error fetching hotels:", error);
+        }
+      };
+
+      // Handle form submission for booking
+      const form = document.getElementById("bookingForm");
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const hotelId = document.getElementById("hotelId").value;
+        const userId = document.getElementById("userId").value;
+        const rooms = document.getElementById("rooms").value;
+        const checkInDate = document.getElementById("checkInDate").value;
+        const checkOutDate = document.getElementById("checkOutDate").value;
+
+        const bookingData = {
+          hotelId,
+          userId,
+          roomsBooked: rooms,
+          checkInDate,
+          checkOutDate,
+        };
+
+        try {
+          const response = await fetch(
+            "http://localhost:3000/api/bookings/book",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(bookingData),
+            }
+          );
+
+          const result = await response.json();
+          const statusMessage = document.getElementById("statusMessage");
+
+          if (response.ok) {
+            statusMessage.style.color = "green";
+            statusMessage.textContent = result.message;
+            loadBookingDetails(); // Refresh booking details list after successful booking
+          } else {
+            statusMessage.style.color = "red";
+            statusMessage.textContent =
+              result.message || "Failed to book the room.";
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          const statusMessage = document.getElementById("statusMessage");
+          statusMessage.style.color = "red";
+          statusMessage.textContent = "An error occurred while booking.";
+        }
+      });
+
+      async function loadBookingDetails() {
+        const filterUserId = document.getElementById("filterUserId").value;
+
+        console.log("filterUserId", filterUserId);
+        let url = "http://localhost:3000/api/bookings/";
+        let response;
+        try {
+          if (filterUserId) {
+            url = `http://localhost:3000/api/bookings/bookingData?userId=${filterUserId}`;
+          }
+          response = await fetch(url);
+
+          // Wait for the response to be converted to JSON
+          const bookings = await response.json();
+
+          console.log("bookings", bookings); // Log the actual data to check
+
+          const bookingDetails = document.getElementById("bookingDetails");
+          bookingDetails.innerHTML = ""; // Clear previous results
+
+          if (bookings.length === 0) {
+            bookingDetails.innerHTML = "<p>No bookings found.</p>";
+            return;
+          }
+
+          bookings.forEach((booking) => {
+            const bookingItem = document.createElement("div");
+            bookingItem.classList.add("booking-item");
+            bookingItem.innerHTML = `
+          <p><strong>Hotel ID:</strong> ${booking.hotelId}</p>
+          <p><strong>User ID:</strong> ${booking.userId}</p>
+          <p><strong>Rooms Booked:</strong> ${booking.roomsBooked}</p>
+          <p><strong>Check-In Date:</strong> ${booking.checkInDate}</p>
+          <p><strong>Check-Out Date:</strong> ${booking.checkOutDate}</p>
+        `;
+            bookingDetails.appendChild(bookingItem);
+          });
+        } catch (error) {
+          console.error("Error fetching booking details:", error);
+        }
+      }
+
+      // Fetch and display booking details when the page loads
+      loadBookingDetails();
+
+      // Add event listener to reload data when the filter is applied
+      document
+        .getElementById("filterUserId")
+        .addEventListener("input", loadBookingDetails);
+    </script>
+  </body>
+</html>
