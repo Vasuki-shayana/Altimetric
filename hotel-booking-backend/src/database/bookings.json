@@ -1,20 +1,5 @@
 [
   {
-    "bookingId": "19cb4b3a-15a8-4bfd-b162-df15d2b40da2",
-    "hotelId": 1,
-    "userId": "user1",
-    "checkInDate": "2024-01-10",
-    "checkOutDate": "2024-01-14",
-    "roomsBooked": 2
-  },
-  {
-    "bookingId": "8b4367a2-20b4-4179-b291-734ff2049ef7",
-    "hotelId": 1,
-    "userId": "user2",
-    "checkInDate": "user2",
-    "checkOutDate": "user2"
-  },
-  {
     "bookingId": "43b124d3-7a62-460c-85db-e41a4ff4c4ef",
     "hotelId": "1",
     "userId": "123",
@@ -45,5 +30,21 @@
     "checkInDate": "2024-12-24",
     "checkOutDate": "2024-12-25",
     "roomsBooked": "1"
+  },
+  {
+    "bookingId": "0089207f-c43c-4839-9cfe-37fb8cba02e7",
+    "hotelId": "1",
+    "userId": "123",
+    "checkInDate": "2024-12-23",
+    "checkOutDate": "2024-12-24",
+    "roomsBooked": "1"
+  },
+  {
+    "bookingId": "a5db8058-7128-4b2a-ac3c-30eac02ce1dc",
+    "hotelId": "2",
+    "userId": "345",
+    "checkInDate": "2024-12-25",
+    "checkOutDate": "2024-12-27",
+    "roomsBooked": "3"
   }
 ]

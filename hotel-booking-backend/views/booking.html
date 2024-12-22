@@ -271,21 +271,13 @@
 
       async function loadBookingDetails() {
         const filterUserId = document.getElementById("filterUserId").value;
-
-        console.log("filterUserId", filterUserId);
         let url = "http://localhost:3000/api/bookings/";
-        let response;
         try {
           if (filterUserId) {
-            url = `http://localhost:3000/api/bookings/bookingData?userId=${filterUserId}`;
+            url = `http://localhost:3000/api/bookings/book?userId=${filterUserId}`;
           }
-          response = await fetch(url);
-
-          // Wait for the response to be converted to JSON
+          const response = await fetch(url);
           const bookings = await response.json();
-
-          console.log("bookings", bookings); // Log the actual data to check
-
           const bookingDetails = document.getElementById("bookingDetails");
           bookingDetails.innerHTML = ""; // Clear previous results
 
@@ -295,15 +287,18 @@
           }
 
           bookings.forEach((booking) => {
+            console.log('booking', booking)
             const bookingItem = document.createElement("div");
             bookingItem.classList.add("booking-item");
             bookingItem.innerHTML = `
-          <p><strong>Hotel ID:</strong> ${booking.hotelId}</p>
-          <p><strong>User ID:</strong> ${booking.userId}</p>
-          <p><strong>Rooms Booked:</strong> ${booking.roomsBooked}</p>
-          <p><strong>Check-In Date:</strong> ${booking.checkInDate}</p>
-          <p><strong>Check-Out Date:</strong> ${booking.checkOutDate}</p>
-        `;
+              <p><strong>Hotel ID:</strong> ${booking.hotelId}</p>
+              <p><strong>User ID:</strong> ${booking.userId}</p>
+              <p><strong>Rooms Booked:</strong> ${booking.roomsBooked}</p>
+              <p><strong>Check-In Date:</strong> ${booking.checkInDate}</p>
+              <p><strong>Check-Out Date:</strong> ${booking.checkOutDate}</p>
+              <button onclick="editBooking('${booking.bookingId}')">Edit</button>
+              <button onclick="cancelBooking('${booking.bookingId}')">Cancel</button>
+            `;
             bookingDetails.appendChild(bookingItem);
           });
         } catch (error) {
@@ -311,6 +306,38 @@
         }
       }
 
+      // Function to handle booking edit
+      function editBooking(bookingId) {
+        
+        // Fetch booking details and populate the form
+        fetch(`http://localhost:3000/api/bookings/bookingData?bookingId=${bookingId}`)
+          .then((response) => response.json())
+          .then((booking) => {
+            document.getElementById("hotelId").value = booking[0].hotelId;
+            document.getElementById("userId").value = booking[0].userId;
+            document.getElementById("rooms").value = booking[0].roomsBooked || '1';
+            document.getElementById("checkInDate").value = booking[0].checkInDate;
+            document.getElementById("checkOutDate").value = booking[0].checkOutDate;
+          })
+          .catch((error) => console.error("Error fetching booking:", error));
+      }
+
+      // Function to handle booking cancellation
+      function cancelBooking(bookingId) {
+        if (confirm("Are you sure you want to cancel this booking?")) {
+          fetch(`http://localhost:3000/api/bookings/book/${bookingId}`, {
+            method: "DELETE",
+          })
+            .then((response) => response.json())
+            .then((result) => {
+              alert(result.message);
+              loadBookingDetails(); // Refresh the booking details list
+            })
+            .catch((error) => {
+              console.error("Error canceling booking:", error);
+            });
+        }
+      }
       // Fetch and display booking details when the page loads
       loadBookingDetails();
 
