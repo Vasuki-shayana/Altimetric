@@ -24,6 +24,7 @@ cd hotel-booking-backend
 npm install
 ```
 
+Note: The database has not been setup (just added the flow and code on how to configure and write migrations)
 3. Set up the database:
   - Ensure you have PostgreSQL installed and running.
   - Create a database named hotel_booking.
