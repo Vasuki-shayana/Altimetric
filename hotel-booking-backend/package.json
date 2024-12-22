@@ -31,6 +31,8 @@
   "devDependencies": {
     "chai": "^5.1.2",
     "chai-http": "^5.1.1",
-    "mocha": "^11.0.1"
+    "mocha": "^11.0.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   }
 }

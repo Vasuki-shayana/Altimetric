@@ -86,6 +86,8 @@ async function cancelBooking(bookingData) {
           results = res;
         }
       }
+      console.log('results', results);
+      
       resolve(results);
     } catch (error) {
       reject({

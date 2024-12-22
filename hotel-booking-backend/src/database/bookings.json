@@ -1,13 +1,5 @@
 [
   {
-    "bookingId": "43b124d3-7a62-460c-85db-e41a4ff4c4ef",
-    "hotelId": "1",
-    "userId": "123",
-    "checkInDate": "2024-12-24",
-    "checkOutDate": "2024-12-25",
-    "roomsBooked": "1"
-  },
-  {
     "bookingId": "51ff0aa5-c159-41c0-9d04-46a66d06cbe3",
     "hotelId": "2",
     "userId": "235",

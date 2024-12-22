@@ -3,6 +3,8 @@ const path = require("path");
 const app = express();
 var bodyParser = require('body-parser')
 const cors = require("cors");
+const swaggerSetup = require('./swagger')
+
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -25,6 +27,7 @@ app.get("/", (req, res) => {
 // Use API routes
 app.use("/api/hotels", hotelRoutes);
 app.use("/api/bookings", bookingRoutes);
+swaggerSetup(app);
 
 // Start the server
 const PORT = process.env.PORT || 3000;

@@ -2,7 +2,38 @@ const express = require("express");
 const router = express.Router();
 const hotelController = require("../controllers/hotelController");
 
-// Route to get all hotels
+/**
+ * @swagger
+ * tags:
+ *   name: Hotels
+ *   description: Hotel management
+ */
+
+/**
+ * @swagger
+ * /api/hotels:
+ *   get:
+ *     summary: Get all hotels
+ *     tags: [Hotels]
+ *     responses:
+ *       200:
+ *         description: A list of hotels
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   name:
+ *                     type: string
+ *                   location:
+ *                     type: string
+ *                   roomsAvailable:
+ *                     type: integer
+ */
 router.get("/", async function (req, res) {
   try {
     const getData = await hotelController.getAllHotels();
@@ -12,7 +43,40 @@ router.get("/", async function (req, res) {
   }
 });
 
-// Route to get a hotel by search param
+/**
+ * @swagger
+ * /api/hotels/search:
+ *   post:
+ *     summary: Search hotels by location
+ *     tags: [Hotels]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               location:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: A list of hotels matching the location
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   name:
+ *                     type: string
+ *                   location:
+ *                     type: string
+ *                   roomsAvailable:
+ *                     type: integer
+ */
 router.post("/search", async function (req, res) {
   try {
     const criteria = req.body;
@@ -23,7 +87,42 @@ router.post("/search", async function (req, res) {
   }
 });
 
-// Route to add a new hotel
+/**
+ * @swagger
+ * /api/hotels/hotel:
+ *   post:
+ *     summary: Add a new hotel
+ *     tags: [Hotels]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               location:
+ *                 type: string
+ *               roomsAvailable:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Hotel added successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 name:
+ *                   type: string
+ *                 location:
+ *                   type: string
+ *                 roomsAvailable:
+ *                   type: integer
+ */
 router.post("/hotel", async function (req, res) {
   try {
     const hotelData = req.body;
