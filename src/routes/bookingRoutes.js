@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const bookingController = require("../controllers/bookingController");
 const { validate: isValidUUID } = require("uuid");
-const { stat } = require("fs");
 
 /**
  * @swagger
@@ -168,7 +167,7 @@ router.post("/book", async function (req, res) {
       checkOutDate: req.body.checkOutDate,
       roomsBooked: req.body.roomsBooked,
     };
-
+    
     const getData = await bookingController.createBooking(bookingData);
     res.status(200).send(getData);
   } catch (error) {

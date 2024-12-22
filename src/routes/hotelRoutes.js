@@ -49,21 +49,17 @@ router.get("/", async function (req, res) {
  *   get:
  *     summary: Search hotels by location or ID
  *     tags: [Hotels]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             oneOf:
- *               - properties:
- *                   location:
- *                     type: string
- *                     description: Filter hotels by location
- *               - properties:
- *                   id:
- *                     type: string
- *                     description: Filter hotels by ID
+ *     parameters:
+ *       - in: query
+ *         name: location
+ *         schema:
+ *           type: string
+ *         description: Filter hotels by location. Either `location` or `id` must be provided, but not both.
+ *       - in: query
+ *         name: id
+ *         schema:
+ *           type: string
+ *         description: Filter hotels by ID. Either `id` or `location` must be provided, but not both.
  *     responses:
  *       200:
  *         description: A list of hotels matching the filter
@@ -96,7 +92,7 @@ router.get("/search", async function (req, res) {
     } else {
       res.status(400).send({
         status: false,
-        message: "Invalid serach query",
+        message: "Invalid search query",
       });
     }
   } catch (error) {

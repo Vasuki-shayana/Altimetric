@@ -1,4 +1,5 @@
 const bookingModel = require("../models/bookingModel");
+const validation = require("../helper/validation");
 
 // Controller to get all bookings
 async function getBookings() {
@@ -6,9 +7,9 @@ async function getBookings() {
   return response;
 }
 
-async function getBookingData(bookingId){
+async function getBookingData(bookingId) {
   const response = await bookingModel.getDataByFilter({
-    bookingId: bookingId
+    bookingId: bookingId,
   });
   return response;
 }
@@ -21,23 +22,50 @@ async function getBookingsByFilter(filter) {
 
 // Controller to create a booking
 async function createBooking(bookingData) {
-  const response = await bookingModel.createBooking(bookingData);
-  return response;
+  const validateHotel = await validation.validateHotelById(bookingData.hotelId);
+  console.log("createBooking validateHotel", validateHotel);
+  if (validateHotel) {
+    const response = await bookingModel.createBooking(bookingData);
+    return response;
+  } else {
+    return {
+      status: false,
+      message: "Invalid Hotel Id",
+    };
+  }
 }
 
 // Controller to create a booking
 async function updateBooking(bookingData) {
-  const response = await bookingModel.updateBooking(bookingData);
-  return response;
+  const validateHotel = await validation.validateHotelById(bookingData.hotelId);
+  console.log("updateBooking validateHotel", validateHotel);
+  if (validateHotel) {
+    const response = await bookingModel.updateBooking(bookingData);
+    return response;
+  } else {
+    return {
+      status: false,
+      message: "Invalid Hotel Id",
+    };
+  }
 }
 
 // Controller to cancel a booking
 async function cancelBooking(bookingData) {
-  const response = await bookingModel.cancelBooking(bookingData);
-  return response;
+  const validateHotel = await validation.validateHotelById(bookingData.hotelId);
+  console.log("cancelBooking validateHotel", validateHotel);
+  if (validateHotel) {
+    const response = await bookingModel.cancelBooking(bookingData);
+    return response;
+  } else {
+    return {
+      status: false,
+      message: "Invalid Hotel Id",
+    };
+  }
 }
 
-async function getUserBookings(userId){
+async function getUserBookings(userId) {
   const response = await bookingModel.getUserBookingData(userId);
   return response;
 }
@@ -49,5 +77,5 @@ module.exports = {
   createBooking,
   updateBooking,
   cancelBooking,
-  getUserBookings
+  getUserBookings,
 };

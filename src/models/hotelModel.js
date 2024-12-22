@@ -14,6 +14,7 @@ async function getAllData() {
 
 // filter data from the table by search params
 async function getDataByFilter(filter) {
+  console.log("getDataByFilter filter", filter);
   return new Promise((resolve, reject) => {
     const filterDataById = hotels.filter((data) => {
       if (filter.id) {
@@ -22,6 +23,7 @@ async function getDataByFilter(filter) {
         return data.location == filter.location;
       }
     });
+    console.log("getDataByFilter filterDataById", filterDataById);
     filterDataById.length > 0 ? resolve(filterDataById) : reject({
       status: false,
       message: "NO data"
