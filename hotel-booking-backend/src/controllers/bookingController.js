@@ -15,7 +15,6 @@ async function getBookingData(bookingId){
 
 // Controller to get a hotel by filter params
 async function getBookingsByFilter(filter) {
-  console.log('getBookingsByFilter filter',filter)
   const response = await bookingModel.getDataByFilter(filter);
   return response;
 }

@@ -44,7 +44,7 @@ npm install
 
 ## API Endpoints
 Refer the swagger documentation 
-he server will run on http://localhost:5000.
+the server will run on http://localhost:3000/api-docs/
 
 ## Environment Variables
 Create a .env file in the root directory and add the following:

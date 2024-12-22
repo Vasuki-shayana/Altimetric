@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const bookingController = require("../controllers/bookingController");
+const { validate: isValidUUID } = require("uuid");
+const { stat } = require("fs");
 
 /**
  * @swagger
@@ -266,6 +268,12 @@ router.put("/book", async function (req, res) {
  */
 router.delete("/book/:bookingId", async function (req, res) {
   try {
+    if(!isValidUUID(req.params.bookingId)){
+      res.status(400).send({
+        status: false,
+        message: "Not an valid booking id"
+      });
+    }
     const getData = await bookingController.cancelBooking({
       bookingId: req.params.bookingId,
     });

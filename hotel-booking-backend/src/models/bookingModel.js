@@ -7,17 +7,18 @@ const { v4: uuidv4 } = require("uuid");
 // Get all data from the table
 async function getAllData() {
   return new Promise((resolve, reject) => {
-    bookings.length > 0 ? resolve(bookings) : reject({
-      status: false,
-      statusCode: 404,
-      message: "NO data",
-    });
+    bookings.length > 0
+      ? resolve(bookings)
+      : reject({
+          status: false,
+          statusCode: 404,
+          message: "NO data",
+        });
   });
 }
 
 // filter data from the table by search params
 async function getDataByFilter(filter) {
-  console.log('filter', filter)
   return new Promise((resolve, reject) => {
     const filterDataById = bookings.filter((data) => {
       if (filter.hotelId) {
@@ -28,11 +29,13 @@ async function getDataByFilter(filter) {
         return data.userId == filter.userId;
       }
     });
-    filterDataById.length > 0 ? resolve(filterDataById) : reject({
-      status: false,
-      statusCode: 404,
-      message: "NO data",
-    });
+    filterDataById.length > 0
+      ? resolve(filterDataById)
+      : reject({
+          status: false,
+          statusCode: 404,
+          message: "NO data",
+        });
   });
 }
 
@@ -52,7 +55,7 @@ async function createBooking(bookingData) {
               checkOutDate: bookingData.checkOutDate,
               roomsBooked: bookingData.roomsBooked,
             });
-          results = res;
+            results = res;
           } else {
             reject({
               status: false,
@@ -61,16 +64,14 @@ async function createBooking(bookingData) {
             });
           }
         }
-      }      
+      }
       resolve(results);
     } catch (error) {
-      reject(
-        {
-          status: false,
-          statusCode: 404,
-          message: `Internal Server Error: ${error}`,
-        },
-      );
+      reject({
+        status: false,
+        statusCode: 404,
+        message: `Internal Server Error: ${error}`,
+      });
     }
   });
 }
@@ -86,8 +87,7 @@ async function cancelBooking(bookingData) {
           results = res;
         }
       }
-      console.log('results', results);
-      
+
       resolve(results);
     } catch (error) {
       reject({
@@ -117,15 +117,19 @@ async function updateBooking(bookingData) {
           results = res;
         }
       }
-      resolve(results);
+      Object.keys(results).length > 0
+        ? resolve(results)
+        : reject({
+            status: false,
+            statusCode: 404,
+            message: "Booking not found",
+          });
     } catch (error) {
-      reject(
-        {
-          status: false,
-          statusCode: 404,
-          message: "Internal Server Error",
-        },
-      );
+      reject({
+        status: false,
+        statusCode: 404,
+        message: `Internal Server Error: ${error}`,
+      });
     }
   });
 }
@@ -183,7 +187,6 @@ async function manageJsonFile(action, object) {
         };
     }
 
-    console.log('data', data);
     // Write the updated array back to the file
     await fs.promises.writeFile(
       filePath,

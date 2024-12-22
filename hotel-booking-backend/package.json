@@ -4,7 +4,7 @@
   "main": "app.js",
   "scripts": {
     "test": "npx mocha test/booking.test.js --timeout 5000",
-    "start": "nodemon --env-file=.env app.js",
+    "start": "nodemon --env-file=.env server.js",
     "build": "npm run build"
   },
   "repository": {
@@ -20,17 +20,22 @@
   "description": "",
   "dependencies": {
     "body-parser": "^1.20.3",
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "fs": "^0.0.1-security",
+    "mocha": "^11.0.1",
     "nodemon": "^3.1.9",
     "path": "^0.12.7",
     "pg": "^8.13.1",
+    "save-dev": "^0.0.1-security",
+    "sinon": "^19.0.2",
     "uuid": "^11.0.3"
   },
   "devDependencies": {
-    "chai": "^5.1.2",
-    "chai-http": "^5.1.1",
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
     "mocha": "^11.0.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
